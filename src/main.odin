@@ -5,11 +5,22 @@ import "core:time"
 import "core:strings"
 import "core:strconv"
 
-procs := [?]Day_Proc{day1}
+import "core:mem/virtual"
+
+procs := [?]Day_Proc{day1, day2}
 Day_Proc :: #type proc(_: string) -> (int, int)
 
 main :: proc() {
   mapped_inputs := map_inputs()
+  arena: virtual.Arena
+  err := virtual.arena_init_growing(&arena)
+  if err != .None {
+    fmt.eprintf("failed to allocate arena: %s", err)
+    return
+  }
+  defer virtual.arena_destroy(&arena)
+  context.allocator = virtual.arena_allocator(&arena)
+
   fmt.println("===============================================================")
   fmt.println("|                    PART1 |             PART2 |  TIME        |")
   fmt.println("===============================================================")
