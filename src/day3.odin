@@ -28,7 +28,6 @@ Lexer :: struct {
   last_rune_size_in_bytes: int,
   token_start_offset:      int,
   current_state:           State_Function,
-  first_digit_complete:    bool,
   disabled:                bool,
   result_1:                int,
   result_2:                int,
