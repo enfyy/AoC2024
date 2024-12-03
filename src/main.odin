@@ -7,7 +7,7 @@ import "core:strconv"
 
 import "core:mem/virtual"
 
-procs := [?]Day_Proc{day1, day2}
+procs := [?]Day_Proc{day1, day2, day3}
 Day_Proc :: #type proc(_: string) -> (int, int)
 
 main :: proc() {
