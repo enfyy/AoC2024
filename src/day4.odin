@@ -3,6 +3,7 @@ package aoc
 import "core:strings"
 import "core:fmt"
 
+@(private = "file")
 Dir :: enum {
   N,
   NE,
@@ -14,6 +15,7 @@ Dir :: enum {
   NW,
 }
 
+@(private = "file")
 all_directions := [Dir][2]int {
   //      y   x  
   .N  = {-1, +0},
