@@ -8,7 +8,6 @@ Tile :: enum {
   Free,
   Obstacle,
   Guard,
-  Visited,
 }
 
 @(private = "file")
@@ -38,6 +37,7 @@ day6 :: proc(input: string) -> (part1: int, part2: int) {
   grid_upper_bounds: [2]int = {len(lines[0]), len(lines)}
   guard_position: [2]int
   collision_positions: [dynamic]Collision_Position
+  visited_positions := make(map[[2]int]struct {})
   guard_direction: Dir
 
   for line, y in lines {
@@ -67,15 +67,35 @@ day6 :: proc(input: string) -> (part1: int, part2: int) {
       append(&grid[y], tile)
     }
   }
-  part1, _ = play(grid, guard_position, grid_upper_bounds, nil, &collision_positions, guard_direction)
+
+  part1, _ = play(
+    grid = grid,
+    guard_position = guard_position,
+    guard_direction = guard_direction,
+    grid_upper_bounds = grid_upper_bounds,
+    placed_obstacle_position = nil,
+    visited_positions = &visited_positions,
+    collision_positions = &collision_positions,
+  )
   clear(&collision_positions)
 
   for line, y in grid {
     for tile, x in line {
       if tile == .Guard || tile == .Obstacle do continue
-      _, is_loop := play(grid, guard_position, grid_upper_bounds, [2]int{x, y}, &collision_positions, guard_direction)
+      position := [2]int{x, y}
+      _, is_on_path_of_no_obstacles := visited_positions[position]
+      if !is_on_path_of_no_obstacles do continue
+
+      _, is_loop := play(
+        grid = grid,
+        guard_position = guard_position,
+        guard_direction = guard_direction,
+        grid_upper_bounds = grid_upper_bounds,
+        placed_obstacle_position = position,
+        visited_positions = nil,
+        collision_positions = &collision_positions,
+      )
       if is_loop {
-        // fmt.printfln("Placing a block at %v would produce a loop", [2]int{x, y})
         part2 += 1
       }
       clear(&collision_positions)
@@ -93,10 +113,11 @@ Collision_Position :: struct {
 play :: proc(
   grid: [dynamic][dynamic]Tile,
   guard_position: [2]int,
+  guard_direction: Dir,
   grid_upper_bounds: [2]int,
   placed_obstacle_position: Maybe([2]int),
+  visited_positions: ^map[[2]int]struct {},
   collision_positions: ^[dynamic]Collision_Position,
-  guard_direction: Dir,
 ) -> (
   unique_visited: int,
   is_loop: bool,
@@ -120,7 +141,6 @@ play :: proc(
         position = pos - steps[guard_direction],
         dir      = guard_direction,
       }
-      //TODO: if the collision happens twice in the same position, it doesnt count
       if slice.contains(collision_positions[:], previous_position) {
         is_loop = true
         return
@@ -131,32 +151,16 @@ play :: proc(
       guard_direction = turn_90_degrees(guard_direction)
 
     case .Free, .Guard:
+      if visited_positions != nil {
+        _, was_visited := visited_positions[pos]
+        if !was_visited {
+          unique_visited += 1
+          visited_positions[pos] = struct {}{}
+        }
+      }
       guard_position = pos
-      unique_visited += 1
-      grid[pos.y][pos.x] = .Visited
 
-    case .Visited:
-      guard_position = pos
     }
   }
   return
-}
-
-@(private = "file")
-print_state :: proc(grid: [dynamic][dynamic]Tile) {
-  for line in grid {
-    for tile in line {
-      switch tile {
-      case .Free:
-        fmt.print(".")
-      case .Obstacle:
-        fmt.print("#")
-      case .Visited:
-        fmt.print("X")
-      case .Guard:
-        fmt.print("^")
-      }
-    }
-    fmt.println()
-  }
 }
