@@ -7,7 +7,7 @@ import "core:strconv"
 
 import "core:mem/virtual"
 
-procs := [?]Day_Proc{day1, day2, day3, day4}
+procs := [?]Day_Proc{day1, day2, day3, day4, day5}
 Day_Proc :: #type proc(_: string) -> (int, int)
 
 main :: proc() {
@@ -53,7 +53,7 @@ map_inputs :: proc() -> map[int]string {
   result := make(map[int]string)
   for input in inputs {
     splits, err := strings.split(input.name, ".")
-    if len(splits) < 2 do continue
+    if len(splits) != 2 do continue
     num, ok := strconv.parse_int(splits[0])
     if !ok do continue
     result[num] = string(input.data)
@@ -64,6 +64,8 @@ map_inputs :: proc() -> map[int]string {
 
 when ODIN_OS == .Windows {
   NEWLINE :: "\r\n"
+  DOUBLE_NEWLINE :: "\r\n\r\n"
 } else {
   NEWLINE :: "\n"
+  DOUBLE_NEWLINE :: "\n\n"
 }
