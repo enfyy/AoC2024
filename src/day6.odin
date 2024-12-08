@@ -18,7 +18,7 @@ Dir :: enum {
   Left,
 }
 
-turn_90_degrees :: proc(dir: Dir) -> Dir {
+turn_90_degrees :: #force_inline proc "contextless" (dir: Dir) -> Dir {
   return Dir((int(dir) + 1) % len(Dir))
 }
 
