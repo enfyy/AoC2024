@@ -1,4 +1,4 @@
-```odin run src/ -ignore-unknown-attributes -error-pos-style:unix -o:aggressive -no-bounds-check```
+```odin run src/ -error-pos-style:unix -o:aggressive -no-bounds-check```
 ```
 ===============================================================
 |                    PART1 |             PART2 |  TIME        |
