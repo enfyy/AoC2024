@@ -43,8 +43,8 @@ day4 :: proc(input: string) -> (part1: int, part2: int) {
           m_pos := x_pos + 1 * step
           a_pos := x_pos + 2 * step
           s_pos := x_pos + 3 * step
-          oob := !(s_pos[0] >= 0 && s_pos[0] < max_y && s_pos[1] >= 0 && s_pos[1] < max_x)
-          if oob do continue
+          is_oob := !(s_pos[0] >= 0 && s_pos[0] < max_y && s_pos[1] >= 0 && s_pos[1] < max_x)
+          if is_oob do continue
 
           the_word_spells_MAS :=
             lines[m_pos[0]][m_pos[1]] == 'M' && lines[a_pos[0]][a_pos[1]] == 'A' && lines[s_pos[0]][s_pos[1]] == 'S'

@@ -4,6 +4,7 @@ import "core:fmt"
 import "core:strings"
 import "core:slice"
 
+@(private = "file")
 Tile :: enum {
   Free,
   Obstacle,
@@ -22,6 +23,7 @@ turn_90_degrees :: #force_inline proc "contextless" (dir: Dir) -> Dir {
   return Dir((int(dir) + 1) % len(Dir))
 }
 
+@(private = "file")
 steps := [Dir][2]int {
   //        x   y  
   .Up    = {+0, -1},
