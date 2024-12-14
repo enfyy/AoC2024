@@ -74,5 +74,9 @@ is_antenna :: #force_inline proc "contextless" (char: rune) -> bool {
 }
 
 oob :: #force_inline proc "contextless" (bounds: [2]int, pos: [2]int) -> bool {
-  return !(pos.x >= 0 && pos.x < bounds.x && pos.y >= 0 && pos.y < bounds.y)
+  return !is_in_bounds(bounds, pos)
+}
+
+is_in_bounds :: #force_inline proc "contextless" (bounds: [2]int, pos: [2]int) -> bool {
+  return pos.x >= 0 && pos.x < bounds.x && pos.y >= 0 && pos.y < bounds.y
 }

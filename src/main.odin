@@ -4,10 +4,11 @@ import "core:fmt"
 import "core:time"
 import "core:strings"
 import "core:strconv"
+import "core:os"
 
 import "core:mem/virtual"
 
-procs := [?]Day_Proc{day1, day2, day3, day4, day5, day6, day7, day8, day9}
+procs := [?]Day_Proc{day1, day2, day3, day4, day5, day6, day7, day8, day9, day10}
 Day_Proc :: #type proc(_: string) -> (int, int)
 
 main :: proc() {
@@ -20,6 +21,7 @@ main :: proc() {
   }
   defer virtual.arena_destroy(&arena)
   context.allocator = virtual.arena_allocator(&arena)
+  args := read_args()
 
   total_duration: f64
   fmt.println("===============================================================")
@@ -28,6 +30,11 @@ main :: proc() {
   sw: time.Stopwatch
   for day_proc, i in procs {
     index := i + 1
+
+    if day_index_arg, ok := args.day_index.?; ok {
+      if index != day_index_arg do continue
+    }
+
     time.stopwatch_start(&sw)
     input, ok := mapped_inputs[index]
     if ok {
@@ -67,4 +74,15 @@ when ODIN_OS == .Windows {
 } else {
   NEWLINE :: "\n"
   DOUBLE_NEWLINE :: "\n\n"
+}
+
+read_args :: proc() -> (args: struct {
+    day_index: Maybe(int),
+  }) {
+  if len(os.args) > 1 {
+    arg := os.args[1]
+    day_index, ok := strconv.parse_int(arg)
+    if ok do args.day_index = day_index
+  }
+  return
 }
