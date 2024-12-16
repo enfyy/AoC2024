@@ -1,10 +1,7 @@
 package aoc
 
-import "core:fmt"
 import "core:strings"
 import "core:strconv"
-import "core:slice"
-import rl "vendor:raylib"
 
 //https://adventofcode.com/2024/day/10
 day10 :: proc(input: string) -> (part1: int, part2: int) {
@@ -109,6 +106,7 @@ directions := [Direction][2]int {
   .W = {-1, +0},
 }
 
+@(private = "file")
 get_valid_steps_in_cardinal_directions :: proc(
   input: []string,
   bounds: [2]int,
