@@ -32,8 +32,6 @@ day13 :: proc(input: string) -> (part1: int, part2: int) {
   X1 = ((PRIZE - (X2 * B)) / A)         X2 = ((PRIZE - (X1 * A)) / B)
   
   3*X1 + X2 = TOKEN_COST 
-  X1 <= 100
-  X2 <= 100
 */
 do_cool_math :: proc(a, b, prize: [2]i64, result: ^i64) {
   den := a.x * b.y - a.y * b.x
@@ -53,7 +51,7 @@ Claw_Machine :: struct {
   b_step: [2]i64,
 }
 
-parse_machines :: proc(input: ^string, ressult: ^[dynamic]Claw_Machine) {
+parse_machines :: proc(input: ^string, result: ^[dynamic]Claw_Machine) {
   for machine in strings.split_iterator(input, DOUBLE_NEWLINE) {
     sections := strings.split(machine, NEWLINE)
     assert(len(sections) == 3, "unexpected input")
@@ -62,7 +60,7 @@ parse_machines :: proc(input: ^string, ressult: ^[dynamic]Claw_Machine) {
     b_split := strings.split(b_button, BUTTON_SEP)
     prize_split := strings.split(prize, PRIZE_SEP)
     append(
-      ressult,
+      result,
       Claw_Machine {
         a_step = [2]i64{atoi64(a_split[0]), atoi64(a_split[1])},
         b_step = [2]i64{atoi64(b_split[0]), atoi64(b_split[1])},

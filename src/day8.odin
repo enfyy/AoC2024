@@ -3,8 +3,6 @@ package aoc
 import "core:fmt"
 import "core:strings"
 import "core:slice"
-import sa "core:container/small_array"
-import la "core:math/linalg"
 
 //https://adventofcode.com/2024/day/8
 day8 :: proc(input: string) -> (part1: int, part2: int) {
